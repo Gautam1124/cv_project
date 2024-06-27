@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Dashboard</title>
+
+    <style>
+        /* Custom styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            border-radius: 8px;
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .alert {
+            border-radius: 8px;
+        }  .flash-message {
+        background-color: #f49536; /* Red background */
+        color: white; /* White text */
+        padding: 10px 15px; /* Padding */
+        margin-bottom: 15px; /* Bottom margin */
+        border-radius: 4px; /* Rounded corners */
+        width: calc(100% - 22px); /* Subtract padding and border width */
+        box-sizing: border-box;
+        text-align: center;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- Include navigation -->
+    {% include 'student_nav.html' %}
+
+    <!-- Display flashed messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <p class="flash-message">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+    <!-- Search Event Section -->
+<!-- Search Event Section -->
+<div class="container " >
+    <h2>Search Event</h2>
+    <form method="POST" style="display: flex; flex-direction: row; ">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.event_name(placeholder="Enter event name", class="form-control", style="padding: 10px; border-radius: 8px; border: 1px solid #ced4da;") }}
+            {% if error in form.event_name.errors %}
+            <span style="color: #dc3545;">{{ error }}</span>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.submit(class="btn btn-primary", style="padding: 10px 20px; border-radius: 8px;") }}
+        </div>
+    </form>
+</div>
+
+
+    <!-- List of Events Section -->
+    <div class="container">
+        <h2>Events</h2>
+        <table class='table'>
+            <thead>
+                <tr>
+                    <th>Event Id</th>
+                    <th>Event Name</th>
+                    <th>Event Type</th>
+                    <th>Event Date</th>
+                    <th>Event Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                <tr>
+                    <td>{{ event.eid }}</td>
+                    <td>{{ event.ename }}</td>
+                    <td>{{ event.type }}</td>
+                    <td>{{ event.date }}</td>
+                    <td>{{ event.time }}</td>
+                    {% if event.event_over %}
+                    <td>Event Over</td>
+                    {% else %}
+                    <td><a href="{{url_for('choose_role',roll_no=user.roll_no, event_id = event.eid)}}"
+                            class="btn btn-primary">Choose Role</a></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // Automatically remove the flash message after 5 seconds
+        setTimeout(function() {
+            var flashMessage = document.querySelector('.flash-message');
+            if (flashMessage) {
+                flashMessage.remove();
+            }
+        }, 3000);
+    </script>
+</body>
+
+</html>

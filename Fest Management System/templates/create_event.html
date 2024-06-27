@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Create Event</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+     
+
+
+<style>
+       
+   .container{
+     height: 100vh;
+     width: 100vw;
+     background-color: rgb(216, 215, 210);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     gap: 5px;
+ 
+   }
+  .eventform{
+    width: 60%;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 25px;
+    border-radius: 5px;
+  
+   
+  }
+    .formbody{
+        display: flex;
+        gap: 5px;
+        
+    }
+    .eventcreate,.createrole{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 50%;
+        padding: 10px;
+        border-radius: 4px;
+        
+    }
+    input{
+        padding: 5px;
+        border-radius: 3px;
+        background-color: white;
+        outline: none;
+        border: none;
+        width: 400px;
+        height: 30px;
+    }
+    label{
+        font-size: larger;
+    }
+    .flash-message {
+        background-color: #f49536; /* Red background */
+        color: white; /* White text */
+        padding: 10px 15px; /* Padding */
+        margin-bottom: 15px; /* Bottom margin */
+        border-radius: 4px; /* Rounded corners */
+        width: calc(100% - 22px); /* Subtract padding and border width */
+        box-sizing: border-box;
+        text-align: center;
+    }
+    .button{
+        width:100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    input[type="submit"] {
+        width: 200px;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+    
+</style>
+</head>
+
+<body>
+
+    {% include 'student_nav.html' %}
+
+
+  
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <p class="flash-message">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+    <div class="container">
+
+
+        <form class="eventform" method="POST" action="{{ url_for('create_event', roll_no=user.roll_no) }}">
+            
+            {{ form.csrf_token }}
+
+            
+           <div class="formbody">
+            
+            <div class="eventcreate">
+                <h1>Create a New Event</h1>
+                {{ form.name.label }} {{ form.name }}
+      
+      
+                {{ form.type.label }} {{ form.type }}
+          
+           
+                {{ form.date.label }} {{ form.date }}
+            
+           
+                {{ form.time.label }} {{ form.time }}
+         
+          
+                {{ form.venue.label }} {{ form.venue }}
+                
+                {{form.organizer.label}} {{form.organizer}}
+      
+                {{ form.description.label }} {{ form.description }}
+          
+            <div >
+                {{ form.image.label }}<br>
+                {{ form.image() }}
+            </div>
+            </div>
+
+            
+        <div class="createrole">
+            <h1>Create Roles</h1>
+          
+                {{ form.role1_name.label }} {{ form.role1_name }}
+        
+            
+                {{ form.role1_description.label }} {{ form.role1_description }}
+            
+            
+                {{ form.role2_name.label }} {{ form.role2_name }}
+            
+            
+                {{ form.role2_description.label }} {{ form.role2_description }}
+            
+            
+                {{ form.role3_name.label }} {{ form.role3_name }}
+            
+            
+                {{ form.role3_description.label }} {{ form.role3_description }}
+            
+             </div>
+           </div>
+           
+            
+            <div class="button">
+                <div class="submitbutton">
+                    {{ form.submit }}
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        // Automatically remove the flash message after 5 seconds
+        setTimeout(function() {
+            var flashMessage = document.querySelector('.flash-message');
+            if (flashMessage) {
+                flashMessage.remove();
+            }
+        }, 3000);
+    </script>
+</body>
+
+</html>

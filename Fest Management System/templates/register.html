@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-image: url('static/images/i3.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .Register-container {
+        background: rgba(255, 255, 255, 0.8); /* Transparent white background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+    }
+
+    h2 {
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="Integer"],
+    input[type="password"],
+    input[type="submit"],
+    input[type="Email"],
+    input[type="number"]{
+        width: calc(100% - 22px); /* Subtract padding and border width */
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    .login-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .login-link:hover {
+        text-decoration: underline;
+    }
+
+    .flash-message {
+        background-color: #f44336; /* Red background */
+        color: white; /* White text */
+        padding: 10px 15px; /* Padding */
+        margin-bottom: 15px; /* Bottom margin */
+        border-radius: 4px; /* Rounded corners */
+        width: calc(100% - 22px); /* Subtract padding and border width */
+        box-sizing: border-box;
+        text-align: center;
+    }
+    .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .navbar {
+        background-color: #007bff;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .navbar a:hover {
+        background-color: #0056b3;
+    }
+</style>
+</head>
+<body> 
+    <nav class="navbar" style="position: absolute; top: 20px; left: 20px;">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('student_signup') }}">Student Register</a>
+        <a href="{{ url_for('student_login') }}">Student Login</a>
+    </nav>
+    <div class="Register-container">
+        <h2>Register</h2>
+
+        <form method="POST" action="#">
+            {{ form.hidden_tag() }}
+            {{ form.email }}
+            {{ form.password }}
+            {{ form.name }}
+            {{ form.contact }}
+            {{ form.college_name }}
+            {{ form.college_location }}
+            <p>Do You Want Accomodation ?</p>{{ form.acc_bool }}
+           
+            <input type="submit" value="Register">
+              
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+        <p>Already have an account? <a href="{{ url_for('login') }}" class="login-link">Login here</a></p>
+    </div>
+    
+    <script>
+        // Automatically remove the flash message after 5 seconds
+        setTimeout(function() {
+            var flashMessage = document.querySelector('.flash-message');
+            if (flashMessage) {
+                flashMessage.remove();
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+    <style>
+        .event-container {
+            background-image: url("{{ url_for('static', filename=event.image) }}");
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .event-details {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .trophy-icon {
+            color: gold;
+            margin-right: 5px;
+        }
+        .overdue {
+            background-color: red;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .still-going {
+            background-color: green;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .flash {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: none;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+        /* Added CSS for register and back buttons */
+        .register-button, .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .register-button {
+            right: 120px; /* Adjust this value to create spacing between the buttons */
+        }
+
+        .back-button {
+            right: 20px;
+        }
+
+        .scrolling-box {
+  width: 300px; /* Adjust width as needed */
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.scrolling-paragraph {
+  display: inline-block;
+}
+    </style>
+</head>
+<body>
+        {% if not event.event_over %}
+        {% if event not in participated_events %}
+        <!-- Display the Register button only if event_over is false -->
+        <form action="{{ url_for('event', pid=pid, eid=event.eid) }}" method="POST">
+            <button type="submit" class="register-button" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+                Register for Event
+            </button>
+        </form>
+        <br>
+       {%endif%}
+    {% endif %}
+    
+
+    <a href="{{ url_for('dashboard', pid=pid) }}" style="text-decoration: none;">
+        <button class="back-button" style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+            Back
+        </button>
+    </a>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="event-container">
+        <div class="event-details">
+            <h1>{{ event.ename }}</h1>
+            {% if event.winner %}
+                <p><span class="trophy-icon">&#127942;</span>Winner: {{ event.winner }}</p>
+            {% endif %}
+            {% if event.runner_up %}
+                <p><span class="trophy-icon">&#127942;</span>Runner-up: {{ event.runner_up }}</p>
+            {% endif %}
+            <p>Date: {{ event.date }}</p>
+            <p>Time: {{ event.time }}</p>
+            <p>Venue: {{ event.venue }}</p>
+            {%if event.organizer %}
+            <p>Organizer: {{ event.organizer }}</p>
+            {%endif%}
+            
+            <div class="scrolling-box">
+                <div class="scrolling-paragraph">
+                  <p>Description: {{ event.description }}</p>
+                </div>
+              </div>
+                <!-- <p style="overflow: auto;">Description: {{ event.description }}</p>
+            -->
+            {% if event.event_over %}
+                <div class="overdue">Event Over</div>
+            {% else %}
+                <div class="still-going">Still Going</div>
+            {% endif %}
+        </div>
+    </div>
+    
+   <script>
+      
+        
+            // Show flash messages for 2 seconds
+            var flashMessages = document.querySelectorAll('.flash');
+            flashMessages.forEach(function(flashMessage) {
+                flashMessage.style.display = 'block';
+                setTimeout(function() {
+                    flashMessage.style.display = 'none';
+                }, 2000);
+            });
+      
+        </script>   
+        
+    
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #167de3;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .back-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('dashboard', pid=current_user.Pid) }}" class="back-btn">BACK</a>
+        <h1>Account Details</h1>
+        <p>Welcome, {{ current_user.Name }}!</p>
+       
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ current_user.Email }}</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ current_user.Name }}</td>
+            </tr>
+            <tr>
+                <td>Contact</td>
+                <td>{{ current_user.Contact }}</td>
+            </tr>
+            <tr>
+                <td>College Name</td>
+                <td>{{ current_user.CollegeName }}</td>
+            </tr>
+            <tr>
+                <td>College Location</td>
+                <td>{{ current_user.CollegeLocation }}</td>
+            </tr>
+            <tr>
+                <td>Accommodation</td>
+                <td>{{ current_user.Accomodation }}</td>
+            </tr>
+            <tr>
+                <td>Registered Events</td>
+                <td>
+                    {% if participated_events %}
+                        <ul>
+                            {% for event in participated_events %}
+                                <li>{{ event.ename }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        No registered events.
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

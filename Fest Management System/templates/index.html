@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+    
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      animation: animatedBackground 20s infinite alternate;
+    }
+    
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+    }
+    
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      font-size: 1.2em;
+      margin: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #45a049;
+    }
+    
+    @keyframes animatedBackground {
+      0% { background-image: url("static/images/danny-howe-bn-D2bCvpik-unsplash.jpg"); }
+      25% { background-image: url("static/images/i1.jpg"); }
+      50% { background-image: url("static/images/i2.jpg"); }
+      75% { background-image: url("static/images/i3.jpg"); }
+      75% { background-image: url("static/images/i4.jpg"); }
+      100% { background-image: url("static/images/danny-howe-bn-D2bCvpik-unsplash.jpg"); }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+  <div class="content">
+    <h1>Welcome to University Event Website</h1>
+    <a href="{{url_for('register')}}" class="btn">New Participant</a>
+    <a href="{{url_for('login')}}" class="btn">Login Participant</a>
+    <a href="{{url_for('student_signup')}}" class="btn">New Student</a>
+    <a href="{{url_for('student_login')}}" class="btn">Login Student</a>
+    <a href="{{url_for('admin_login')}}" class="btn">Login Admin</a>
+  </div>
+</body>
+</html>

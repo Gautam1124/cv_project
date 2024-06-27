@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage Events</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .completed-event {
+            background-color: #f0f8ff;
+            border: 1px solid #87ceeb;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .completed-event h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'student_nav.html' %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <div class="container">
+        <h1>Event Details</h1>
+        <div>
+            <div>
+                <h2>{{ event.ename }}</h2>
+                <p>{{ event.description }}</p>
+                <p>Date: {{ event.date }}</p>
+                <p>Time: {{ event.time }}</p>
+                <p>Location: {{ event.venue }}</p>
+            </div>
+        </div>
+
+        <h2>All Roles</h2>
+        {% if roles|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                <tr>
+                    <td>{{ role.rname }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Roles created for this event</p>
+        {% endif %}
+
+        <h2>Event Organizer</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Organizer Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ event.organizer }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Created By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ admin.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Managers</h2>
+        {% if managers|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Manager Name</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for manager in managers %}
+                <tr>
+                    <td>{{ manager.name }}</td>
+                    <td>{{ manager.rname }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Managers present</p>
+        {% endif %}
+        <br>
+        <h2>Volunteers</h2>
+        {% if volunteers|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Volunteer Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for volunteer in volunteers %}
+                <tr>
+                    <td>{{ volunteer.name }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Volunteers present</p>
+        {% endif %}
+        {% if over_flag == 1 %}
+        <div class="completed-event">
+            <h2>Event Completed</h2>
+            {% if event.winner %}
+            <h3>Winner: {{ event.winner }}</h3>
+            <h3>Runner-up: {{ event.runner_up }}</h3>
+            {% endif %}
+        </div>
+        {% endif %}
+        <h2>Registered Participant</h2>
+        {% if registerd_participants|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Participant Id</th>
+                
+                    <th>Participant Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in registerd_participants %}
+                <tr>
+                    <td>{{ participant.Pid }}</td>
+          
+                    <td>{{ participant.Name }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Participant registerd yet.</p>
+        {% endif %}
+        {% if over_flag == 1 %}
+        <div class="completed-event">
+            <h2>Event Completed</h2>
+            {% if event.winner %}
+            <h3>Winner: {{ event.winner }}</h3>
+            <h3>Runner-up: {{ event.runner_up }}</h3>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>

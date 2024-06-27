@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+
+    <!-- Bootstrap CSS link (you should download the CSS file and adjust the path accordingly) -->
+    <link rel="stylesheet" href="path/to/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-info {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages with Timeout -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-info m-3" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <script>
+                // Set a timeout to hide flash messages after 5 seconds
+                setTimeout(function() {
+                    document.querySelectorAll('.alert').forEach(function(alert) {
+                        alert.style.display = 'none';
+                    });
+                }, 5000);
+            </script>
+        {% endif %}
+    {% endwith %}
+
+    <a href="{{url_for('admin_logout')}}" class="btn btn-info">Logout</a>
+    <h2>Active Students</h2>
+    {% if a_s|length %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Roll Number</th>
+            <th>Action</th>
+        </tr>
+        {% for s in a_s %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{s.roll_no}}</td>
+            <td><a href="{{url_for('delete_student',roll_no=s.roll_no)}}" class="btn">Delete Student</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No active student</p>
+    {% endif %}
+
+    <h2>Inactive Students</h2>
+    {% if d_s|length %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Roll Number</th>
+            <th>Action</th>
+        </tr>
+        {% for s in d_s %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{s.roll_no}}</td>
+            <td><a href="{{url_for('addback_student',roll_no=s.roll_no)}}" class="btn">Restore Student</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No inactive student</p>
+    {% endif %}
+
+    <h2>Active Participants</h2>
+    {% if a_p|length %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>PID</th>
+            <th>Action</th>
+        </tr>
+        {% for p in a_p %}
+        <tr>
+            <td>{{ p.Name }}</td>
+            <td>{{p.Pid}}</td>
+            <td><a href="{{url_for('delete_participant',Pid=p.Pid)}}" class="btn">Delete Participant</a> </td>
+
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No active participant</p>
+    {% endif %}
+
+    <h2>Inactive Participants</h2>
+    {% if d_p|length %}
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>PID</th>
+            <th>Action</th>
+        </tr>
+        {% for p in d_p %}
+        <tr>
+            <td>{{ p.Name }}</td>
+            <td>{{p.Pid}}</td>
+            <td><a href="{{url_for('addback_participant',Pid=p.Pid)}}" class="btn">Restore Participant</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No inactive paricipant</p>
+    {% endif %}
+
+    <h2>Unauthenticated Events</h2>
+    {% if u_e|length %}
+    <table>
+        <tr>
+            <th>Event Name</th>
+            <th>Action</th>
+        </tr>
+        {% for e in u_e %}
+        <tr>
+            <td>{{ e.ename }}</td>
+            <td><a href="{{url_for('authenticate_event',eid=e.eid)}}" class="btn">Authenticate Event</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No Unauthenticated event</p>
+    {% endif %}
+
+    <h2>Authenticated Events</h2>
+    {% if v_e|length %}
+    <table>
+        <tr>
+            <th>Event Name</th>
+            <th>Status</th>
+        </tr>
+        {% for e in v_e %}
+        <tr>
+            <td>{{ e.ename }}</td>
+            <td>
+                {% if e.event_over %}
+                Event over
+                {% else %}
+                Live
+                {% endif %}    
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No Authenticated event</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Student Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <style>
+        /* Update the CSS to enhance the visual appeal */
+
+/* Improve body background */
+body {
+    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Style container */
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style headings */
+h1, h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+/* Style form group */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Style primary button */
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Style links */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Style tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Style event status */
+h3 {
+    color: #28a745;
+    margin: 0;
+}
+
+    </style>
+</head>
+
+<body>
+    {% include 'student_nav.html' %}
+    {% if flag == 0 %}
+    <div >
+        <h1>NO EVENTS TO SHOW</h1>
+    </div>
+    {% else %}
+    <div class="container">
+        <h2>Search Event</h2>
+        <div x>
+            <form method="POST" style="margin-top: 20px;">
+                {{ form.hidden_tag() }}
+                <div style="display: flex; align-items: center;">
+                    {{ form.event_name(placeholder="Enter event name", class="form-control", style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #ccc;") }}
+                    <button type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">Search</button>
+                </div>
+                {% if error in form.event_name.errors %}
+                <span style="color: red;">{{ error }}</span>
+                {% endif %}
+            </form>
+            
+        </div>
+        {% if events_created|length %}
+        <h1>Created Events</h1>
+        <table >
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Event Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events_created %}
+                <tr>
+                    <td><a href="{{url_for('view_created_event',roll_no=roll_no,event_id = event.eid,over_flag=event.event_over)}}">{{event.ename}}</a></td>
+                    <td>{% if event.event_over==0 %}<h3>Live</h3>{% else %}<h3>Finished</h3>{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        {% if events_managed|length %}
+        <h1>Managing Events</h1>
+        <table >
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Event Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events_managed %}
+                <tr>
+                    <td><a href="{{url_for('view_managed_event',roll_no=roll_no,event_id = event.eid,over_flag=event.event_over)}}">{{event.ename}}</a></td>
+                    <td>{% if event.event_over==0 %}<h3>Live</h3>{% else %}<h3>Finished</h3>{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        {% if events_volunteered|length %}
+        <h1>Volunteering Events</h1>
+        <table >
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Event Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events_volunteered %}
+                <tr>
+                    <td>{{event.ename}}</td>
+                    <td>{% if event.event_over==0 %}<h3>Live</h3>{% else %}<h3>Finished</h3>{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+
+</html>

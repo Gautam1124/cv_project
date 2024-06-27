@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        
+
+        .flash-message {
+            background-color: #36f498;
+            color: white;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .finish-event-link {
+            display: inline-block;
+           
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Include the navigation bar -->
+    {% include 'student_nav.html' %}
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for message in messages %}
+        <p class="flash-message">{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    <!-- Main content container -->
+    <div class="container">
+    
+        <div style="max-width: 800px; margin: 0 auto; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px;">
+            
+        <h1>Event Details</h1>
+            <h1 style="text-align: center; color: #333; font-size: 28px;">{{ event.ename }}</h1>
+            <div style="text-align: center;">
+                <p style="color: #888; font-size: 16px; margin-bottom: 10px;">Date: {{ event.date }}</p>
+                <p style="color: #888; font-size: 16px; margin-bottom: 10px;">Time: {{ event.time }}</p>
+                <p style="color: #888; font-size: 16px; margin-bottom: 20px;">Location: {{ event.venue }}</p>
+                {% if event.organizer %}
+                <p style="color: #888; font-size: 16px; margin-bottom: 20px;">Organizer: {{ event.organizer }}</p>
+                {% endif %}
+            </div>
+            <p id="description" style="text-align: center; color: #666; font-size: 18px; margin-bottom: 20px; overflow-y: auto; max-height: 200px;">{{ event.description }}</p>
+
+           
+        </div>
+        <br>
+        <h2>All Roles</h2>
+        {% if roles|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                <tr>
+                    <td>{{ role.rname }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Roles created for this event</p>
+        {% endif %}
+        <br>
+        <h2>Managers</h2>
+        {% if managers|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Manager Name</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for manager in managers %}
+                <tr>
+                    <td>{{ manager.name }}</td>
+                    <td>{{ manager.rname }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Managers present</p>
+        {% endif %}
+        <br>
+        <h2>Volunteers</h2>
+        {% if volunteers|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Volunteer Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for volunteer in volunteers %}
+                <tr>
+                    <td>{{ volunteer.name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Volunteers present</p>
+        {% endif %}
+
+        <h2>Registered Participants</h2>
+        {% if registerd_participants|length %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Participant Id</th>
+                
+                    <th>Participant Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for participant in registerd_participants %}
+                <tr>
+                    <td>{{ participant.Pid }}</td>
+          
+                    <td>{{ participant.Name }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+        {% else %}
+        <p>No Participant registerd yet.</p>
+        {% endif %}
+
+        {% if over_flag == 0 %}
+        <!-- Form for adding roles and winners -->
+        <form method="post" action="">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                <h2>Add Role</h2>
+                <p>(not necessary)</p>
+                {{ form.role_name.label }}{{ form.role_name }}
+                {{ form.role_description.label }}{{ form.role_description }}
+            </div>
+            <div class="form-group">
+                <h2>Add Winner</h2>
+                <p>(not necessary)</p>
+                {{ form.winner.label }}{{ form.winner }}
+                {{ form.runner.label }}{{ form.runner }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+        <!-- Finish event link -->
+        <div class="finish-event-link" style="color: red;">
+            <a href="{{url_for('view_created_event', roll_no=user.roll_no, event_id=event.eid, over_flag=1)}}"
+                class="btn">Finish Event</a>
+        </div>
+        {% else %}
+        <!-- Event completed message -->
+        <h2 style="text-align: center; background-color: #ffcccc; color: #990000; padding: 10px; border-radius: 5px;">Event Completed</h2>
+
+        {% if event.winner %}
+        <h3>Winner: {{ event.winner }}</h3>
+        <h3>Runner: {{ event.runner_up }}</h3>
+        {% endif %}
+        {% endif %}
+    </div>
+    <!-- Remove flash message after 3 seconds -->
+    <script>
+        setTimeout(function () {
+            var flashMessage = document.querySelector('.flash-message');
+            if (flashMessage) {
+                flashMessage.remove();
+            }
+        }, 3000);
+    </script>
+</body>
+
+</html>
